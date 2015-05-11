@@ -7,7 +7,7 @@ date_default_timezone_set('America/Montreal');
 
 $paths = [
     __DIR__.'/../vendor/autoload.php', // locally
-    __DIR__.'/../../autoload.php' // dependency
+    __DIR__.'/../../../autoload.php' // dependency
 ];
 foreach ($paths as $path) {
     if (file_exists($path)) {
