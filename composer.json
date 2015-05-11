@@ -1,0 +1,30 @@
+{
+    "name": "vanilla/mustacher",
+    "description": "Generate mustache resources for your localhost.",
+    "minimum-stability": "stable",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Todd Burry",
+            "email": "todd@vanillaforums.com"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:vanilla/garden-cli.git"
+        }
+    ],
+    "require": {
+        "vanilla/garden-cli": "*",
+        "mustache/mustache": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Mustacher\\": "src"
+        }
+    },
+    "bin": [
+        "bin/mustacher"
+    ]
+}
