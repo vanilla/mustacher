@@ -2,12 +2,10 @@
 /**
  * @author Todd Burry <todd@vanillaforums.com>
  * @copyright 2009-2014 Vanilla Forums Inc.
- * @license Proprietary
+ * @license MIT
  */
 
 namespace Mustacher;
-
-use MessageFormatter;
 
 class Mustacher {
     const FORMAT_MUSTACHE = 'mustache';
@@ -72,4 +70,3 @@ class Mustacher {
         return $result;
     }
 }
- 
