@@ -1,6 +1,6 @@
 {
     "name": "vanilla/mustacher",
-    "description": "Generate mustache resources for your localhost.",
+    "description": "Run mustache templates against a JSON file from the command line.",
     "minimum-stability": "stable",
     "license": "MIT",
     "authors": [

@@ -5,15 +5,24 @@ ini_set('track_errors', 1);
 
 date_default_timezone_set('America/Montreal');
 
+$paths = [
+    __DIR__.'/../vendor/autoload.php', // locally
+    __DIR__.'/../../autoload.php' // dependency
+];
+foreach ($paths as $path) {
+    if (file_exists($path)) {
+        require_once $path;
+        break;
+    }
+}
+
 use Garden\Cli\Cli;
 use Garden\Cli\Schema;
 use Mustacher\Mustacher;
 
-require_once __DIR__.'/../vendor/autoload.php';
-
 $cli = new Cli();
 
-$cli->description('Generate an agent resource from a local json file.')
+$cli->description('Run mustache templates against a JSON file.')
     ->opt('template:t', 'The path to the template file.', true)
     ->opt('data:d', 'The path to the data json data file.', true)
     ->opt('output:o', 'The path where the output will be written.')
