@@ -24,15 +24,18 @@ $cli = new Cli();
 
 $cli->description('Run mustache templates against a JSON file.')
     ->opt('template:t', 'The path to the template file.', true)
-    ->opt('data:d', 'The path to the data json data file.', true)
+    ->opt('input:i', 'The path to the input JSON data file.')
     ->opt('output:o', 'The path where the output will be written.')
     ->opt('format:f', 'The format of the template file. Either mustache or message.')
+    ->opt('data:d', 'A JSON formatted data object. This will be merged on top of the input file if both are specified.')
     ;
 
 $args = $cli->parse($argv);
 
 try {
-    $str = Mustacher::generateFile($args->getOpt('template'), $args->getOpt('data'), $args->getOpt('format', Mustacher::FORMAT_MUSTACHE));
+    $data = Mustacher::mergeData($args->getOpt('input'), $args->getOpt('data'));
+
+    $str = Mustacher::generateFile($args->getOpt('template'), $data, $args->getOpt('format', Mustacher::FORMAT_MUSTACHE));
 } catch (Exception $ex) {
     echo $cli->red($ex->getMessage()."\n");
     die();

@@ -51,22 +51,62 @@ class Mustacher {
         return $result;
     }
 
-    public static function generateFile($templatePath, $dataPath, $format = self::FORMAT_MUSTACHE) {
+    public static function generateFile($templatePath, $data, $format = self::FORMAT_MUSTACHE) {
         if (!file_exists($templatePath)) {
             throw new \Exception("File $templatePath does not exist.", 500);
         }
-        if (!file_exists($dataPath)) {
-            throw new \Exception("File $dataPath does not exist.", 500);
-        }
-
         $template = file_get_contents($templatePath);
-        $data = json_decode(file_get_contents($dataPath), true);
+        $result = static::generate($template, $data, $format);
+        return $result;
+    }
 
-        if ($data === false) {
-            throw new \Exception(json_last_error_msg(), json_last_error());
+    /**
+     * Merge a JSON file with a JSON string.
+     *
+     * @param string $jsonPath The path to a JSON file or empty.
+     * @param string $jsonString A JSON formatted string. It can omit the opening and closing braces.
+     * @return array Returns the array of data or null on error.
+     * @throws \Exception Throws an exception when there is an error with the input parameters.
+     */
+    public static function mergeData($jsonPath, $jsonString) {
+        if (!$jsonPath && !$jsonString) {
+            throw new \Exception("You must provide either a path to a input file or a JSON string.", 400);
         }
 
-        $result = static::generate($template, $data, $format);
+        $result = [];
+
+        // Add the input file to the result.
+        if ($jsonPath) {
+            if (!file_exists($jsonPath)) {
+                throw new \Exception("The input file does not exist.", 400);
+            }
+
+            $data = json_decode(file_get_contents($jsonPath), true);
+            if ($data === null) {
+                throw new \Exception('There is an error in your input file: '.json_last_error_msg(), json_last_error());
+            }
+
+            $result = array_replace($result, $data);
+        }
+
+        // Add the JSON string to the result.
+        $jsonString = trim($jsonString);
+        if ($jsonString) {
+            if (substr($jsonString, 0, 1) !== '{') {
+                $jsonString = '{'.$jsonString;
+            }
+            if (substr($jsonString, -1) !== '}') {
+                $jsonString .= '}';
+            }
+
+            $data = json_decode($jsonString, true);
+            if ($data === null) {
+                throw new \Exception('There is an error in your JSON string: '.json_last_error_msg(), json_last_error());
+            }
+
+            $result = array_replace($result, $data);
+        }
+
         return $result;
     }
 }
